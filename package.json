@@ -4,6 +4,7 @@
   "description": "jupiter-template",
   "version": "0.0.3",
   "publisher": "azhezzz",
+  "icon": "images/logo.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/azhezzz/flutter_redux_templates"
