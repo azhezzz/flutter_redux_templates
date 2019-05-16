@@ -1,27 +1,89 @@
+"use strict";
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
+import * as util from "./util";
+const fs = require("fs");
+import config from "./config";
 
+import { window } from "vscode";
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+  const azheSubscribe = context.subscriptions.push.bind(
+    context.subscriptions
+  ) as typeof context.subscriptions.push;
+  const azheRegisterCommand = (
+    command: string,
+    callback: (...args: any[]) => any,
+    thisArg?: any
+  ) =>
+    azheSubscribe(vscode.commands.registerCommand(command, callback, thisArg));
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-		console.log('Congratulations, your extension "template" is now active!');
+  // 创建jupiter reducer模板文件
+  azheRegisterCommand("extension.GenerateReducerTemplate", async uri => {
+    try {
+      await util.checkTemplatesFolder(context);
+      let pathname = "";
+      window
+        .showInputBox({
+          password: false,
+          ignoreFocusOut: true,
+          placeHolder: "Please input reducer name",
+          validateInput: async function(text) {
+            pathname = await util.generateFolderPath(text, "reducer", uri);
+            return (await util.checkFolderIsExits(pathname))
+              ? "Oops! Reducer Already Exits"
+              : null;
+          }
+        })
+        .then(async function(text) {
+          if (!text) {
+            return;
+          }
+          util.copyFolder(config.reducerTemplatesFolderPath, pathname, text);
+        });
+    } catch (error) {
+      vscode.window.showErrorMessage(`Jupiter-Template: ${error.message}`);
+    }
+  });
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
+  // 创建jupiter action模板文件
+  azheRegisterCommand("extension.GenerateActionTemplate", async uri => {
+    try {
+      await util.checkTemplatesFolder(context);
+      let pathname = "";
+      window
+        .showInputBox({
+          password: false,
+          ignoreFocusOut: true,
+          placeHolder: "Please input action name",
+          validateInput: async function(text) {
+            pathname = await util.generateFolderPath(text, "action", uri);
+            return (await util.checkFolderIsExits(pathname))
+              ? "Oops! Action Already Exits"
+              : null;
+          }
+        })
+        .then(async function(text) {
+          if (!text) {
+            return;
+          }
+          util.copyFolder(config.reducerTemplatesFolderPath, pathname, text);
+        });
+    } catch (error) {
+      vscode.window.showErrorMessage(`Jupiter-Template: ${error.message}`);
+    }
+  });
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World!');
-	});
-
-	context.subscriptions.push(disposable);
+  // 打开 templates文件夹
+  azheRegisterCommand("extension.OpenJupiterTemplateFolder", async () => {
+    try {
+      await util.checkTemplatesFolder(context);
+      let uri = vscode.Uri.file(config.templatesFolderPath);
+      vscode.commands.executeCommand("vscode.openFolder", uri, true);
+    } catch (error) {
+      vscode.window.showErrorMessage(`Jupiter-Template: ${error.message}`);
+    }
+  });
 }
-
-// this method is called when your extension is deactivated
-export function deactivate() {}
