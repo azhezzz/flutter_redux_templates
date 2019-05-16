@@ -5,6 +5,7 @@ import { PathLike } from "mz/fs";
 
 const inflect = require("i")(true);
 
+// 复制文件
 export function copyFile(src: PathLike, dst: PathLike) {
   return new Promise((resolve, reject) => {
     fs.createReadStream(src)
@@ -19,6 +20,7 @@ export function copyFile(src: PathLike, dst: PathLike) {
   });
 }
 
+// 替换内容
 export function relaceContent(target: string, path: string) {
   return new Promise((resolve, reject) => {
     fs.readFile(path, "utf-8", function(err, data) {
@@ -105,7 +107,7 @@ export async function checkFolderIsExits(name: string) {
 
 // 生成文件夹路径
 export async function generateFolderPath(name: string, type: string, uri: any) {
-  let foldername = name + "_" + type;
+  let foldername = name + type;
   let pathname = "";
   let stat = await fs.stat(uri.path);
   if (stat.isDirectory()) {

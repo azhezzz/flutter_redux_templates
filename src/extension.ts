@@ -31,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
           ignoreFocusOut: true,
           placeHolder: "Please input reducer name",
           validateInput: async function(text) {
-            pathname = await util.generateFolderPath(text, "reducer", uri);
+            pathname = await util.generateFolderPath(text, "Reducer", uri);
             return (await util.checkFolderIsExits(pathname))
               ? "Oops! Reducer Already Exits"
               : null;
@@ -59,7 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
           ignoreFocusOut: true,
           placeHolder: "Please input action name",
           validateInput: async function(text) {
-            pathname = await util.generateFolderPath(text, "action", uri);
+            pathname = await util.generateFolderPath(text, "Action", uri);
             return (await util.checkFolderIsExits(pathname))
               ? "Oops! Action Already Exits"
               : null;
@@ -69,7 +69,7 @@ export function activate(context: vscode.ExtensionContext) {
           if (!text) {
             return;
           }
-          util.copyFolder(config.reducerTemplatesFolderPath, pathname, text);
+          util.copyFolder(config.actionTemplatesFolderPath, pathname, text);
         });
     } catch (error) {
       vscode.window.showErrorMessage(`Jupiter-Template: ${error.message}`);
