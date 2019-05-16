@@ -1,8 +1,8 @@
 {
-  "name": "template-for-jupiter-app",
-  "displayName": "template for jupiter app",
-  "description": "jupiter-template",
-  "version": "0.0.3",
+  "name": "jupiter-simple-redux-template",
+  "displayName": "jupiter-simple-redux-template",
+  "description": "jupiter项目简单的redux模板",
+  "version": "0.0.1",
   "publisher": "azhezzz",
   "icon": "images/logo.png",
   "repository": {
